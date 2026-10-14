@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.ghost.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientPlayerEntityMixin",
+    "MinecraftClientMixin",
+    "EntityMixin",
+    "GameRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
