@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "ghostclient",
+  "version": "${version}",
+  "name": "Ghost Client",
+  "description": "PvP utility mod for 1.21.11",
+  "authors": ["ghost"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.ghost.client.GhostClient"]
+  },
+  "mixins": ["ghost.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": ">=1.21.0",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
