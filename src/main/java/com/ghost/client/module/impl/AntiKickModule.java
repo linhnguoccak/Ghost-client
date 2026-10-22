@@ -7,7 +7,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class AntiKickModule extends Module {
 
-    private final Setting<Double> interval = new Setting<>("Interval", 20.0, 5.0, 100.0);
+    private final Setting<Integer> interval = new Setting<>("Interval", 20, 5, 100);
     private int ticker = 0;
 
     public AntiKickModule() {
@@ -18,9 +18,9 @@ public class AntiKickModule extends Module {
     @Override
     public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null) return;
         ticker++;
-        if (ticker >= interval.getValue().intValue()) {
+        if (ticker >= interval.getValue()) {
             ticker = 0;
             mc.player.networkHandler.sendPacket(
                 new PlayerMoveC2SPacket.OnGroundOnly(mc.player.isOnGround())
