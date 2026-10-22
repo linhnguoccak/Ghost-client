@@ -2,37 +2,29 @@ package com.ghost.client.module.impl;
 
 import com.ghost.client.module.Module;
 import com.ghost.client.module.config.Setting;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class AntiKickModule extends Module {
 
-    public final Setting<Integer> interval = new Setting<>(
-        "Interval (ticks)", "Ticks between packets", 30, 5, 100);
-    public final Setting<Boolean> swingPacket = new Setting<>(
-        "Swing Packet", "Send swing arm packet", true);
-    public final Setting<Boolean> movePacket = new Setting<>(
-        "Move Packet", "Send tiny movement packet", true);
-
-    private int tickTimer = 0;
+    private final Setting<Double> interval = new Setting<>("Interval", 20.0, 5.0, 100.0);
+    private int ticker = 0;
 
     public AntiKickModule() {
-        super("AntiKick", "Prevents AFK kick / anti-band", Category.PLAYER);
-        settings.add(interval);
-        settings.add(swingPacket);
-        settings.add(movePacket);
+        super("AntiKick", "Prevents AFK kick", "Player");
+        addSetting(interval);
     }
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.getNetworkHandler() == null) return;
-        tickTimer++;
-        if (tickTimer < interval.getValue()) return;
-        tickTimer = 0;
-        if (movePacket.getValue()) {
-            mc.getNetworkHandler().sendPacket(
-                new PlayerMoveC2SPacket.OnGroundOnly(mc.player.isOnGround(), mc.player.horizontalCollision));
-        }
-        if (swingPacket.getValue()) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc.player == null || mc.world == null) return;
+        ticker++;
+        if (ticker >= interval.getValue().intValue()) {
+            ticker = 0;
+            mc.player.networkHandler.sendPacket(
+                new PlayerMoveC2SPacket.OnGroundOnly(mc.player.isOnGround())
+            );
             mc.player.swingHand(net.minecraft.util.Hand.MAIN_HAND);
         }
     }
